@@ -42,8 +42,9 @@ dfs = get_data_from_api()
 print(dfs[:5])
 
 # ---- SIDEBAR ----
-st.sidebar.image("./static/graf.png", use_column_width=True, width=275)
-
+# Image
+st.sidebar.image("./static/graf.png", width=275)
+# Header
 st.sidebar.header("Please Filter Here:")
 alarmNumber = st.sidebar.multiselect(
     "Select AlarmNumber:",
@@ -62,6 +63,7 @@ dfs = dfs.query(
 
 
 # ---------------MAIN PAGE-----------
+st.image("./static/okuma.png", use_column_width=True, width=275)
 st.title(":computer: OKUMA DB ToolBreakage")
 st. markdown("##")
 
@@ -75,7 +77,8 @@ fig_tool_broken = px.bar(
     y=number_of_tool_broken_per_tool.index,
     orientation="h",
     title="<b> Top ToolBreakage tool </b>",
-    template="plotly_white",
+    template="plotly_dark",
+
 )
 
 # Remove lines and background color from fig;
@@ -86,8 +89,8 @@ fig_tool_broken.update_layout(
 st.plotly_chart(fig_tool_broken)
 
 # Show data
-st.text("Raw Data Table, from MSSQL Database:")
-st.dataframe(dfs)
+# st.text("Raw Data Table, from MSSQL Database:")
+# st.dataframe(dfs)
 
 
 # ---- HIDE STREAMLIT STYLE ----
