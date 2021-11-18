@@ -9,6 +9,7 @@ import numpy as np
 from pandas import Series, DataFrame
 import plotly.express as px
 import streamlit as st
+from streamlit_lottie import st_lottie
 
 
 st.set_page_config(page_title="OkumaDB Dashboard",
@@ -42,15 +43,59 @@ dfs = get_data_from_api()
 print(dfs[:5])
 
 # ---- SIDEBAR ----
-# Image
-st.sidebar.image("./static/graf.png", width=275)
+
+# Lottie function
+
+
+def load_lottiefile(filepath: str):
+    with open(filepath, "r") as f:
+        return json.load(f)
+
+
+lottie_bigData = load_lottiefile("static/bigData.json")
+lottie_bell = load_lottiefile("static/bell.json")
+lottie_tool = load_lottiefile("static/tool.json")
+
+#  Image
+#st.sidebar.image("./static/graf.png", width=275)
+
+with st.sidebar:
+    st_lottie(lottie_bigData,
+              speed=.4,
+              reverse=False,
+              loop=False,
+              quality="high",
+              renderer="svg",
+              height=None,
+              width=275,
+              key=None,
+              )
+
 # Header
 st.sidebar.header("Please Filter Here:")
+
+with st.sidebar:
+    st_lottie(lottie_bell,
+              speed=1,
+              reverse=False,
+              loop=True,
+              quality="high",
+              width=25,
+              )
+
 alarmNumber = st.sidebar.multiselect(
     "Select AlarmNumber:",
     options=dfs["AlarmNumber"].unique(),
     default=dfs["AlarmNumber"].unique()
 )
+with st.sidebar:
+    st_lottie(lottie_tool,
+              speed=1,
+              reverse=False,
+              loop=True,
+              quality="high",
+              width=25,
+              )
 
 toolName = st.sidebar.multiselect(
     "Select Tool Number:",
@@ -78,6 +123,7 @@ fig_tool_broken = px.bar(
     orientation="h",
     title="<b> Top ToolBreakage tool </b>",
     template="plotly_dark",
+
 
 )
 
