@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 # import matplotlib.pyplot as plt
-
+import time
 import pandas as pd
 import numpy as np
 from pandas import Series, DataFrame
@@ -43,7 +43,7 @@ dfs = get_data_from_api()
 print(dfs[:5])
 
 # ---- SIDEBAR ----
-
+st.sidebar.image("./static/okuma.png", use_column_width=False, width=275)
 # Lottie function
 
 
@@ -61,10 +61,10 @@ lottie_tool = load_lottiefile("static/tool.json")
 
 with st.sidebar:
     st_lottie(lottie_bigData,
-              speed=.4,
+              speed=.3,
               reverse=False,
               loop=False,
-              quality="high",
+              quality="low",
               renderer="svg",
               height=None,
               width=275,
@@ -108,8 +108,8 @@ dfs = dfs.query(
 
 
 # ---------------MAIN PAGE-----------
-st.image("./static/okuma.png", use_column_width=True, width=275)
-st.title(":computer: OKUMA DB ToolBreakage")
+
+st.title("ToolBreakage")
 st. markdown("##")
 
 
@@ -126,18 +126,43 @@ fig_tool_broken = px.bar(
 
 
 )
+number_of_OBrud_checked = dfs['TimeLostToolBreakage'].value_counts()
+
+fig_OBrud_Checked = px.bar(
+    number_of_OBrud_checked,
+    x="TimeLostToolBreakage",
+    y=number_of_OBrud_checked.index,
+    orientation="v",
+    title="<b> Toolbreakage checked by operator </b>",
+    template="plotly_dark",
+
+
+)
+
 
 # Remove lines and background color from fig;
 fig_tool_broken.update_layout(
     plot_bgcolor="rgba(0,0,0,0)",
     xaxis=(dict(showgrid=False))
 )
-st.plotly_chart(fig_tool_broken)
+fig_OBrud_Checked.update_layout(
+    plot_bgcolor="rgba(0,0,0,0)",
+    xaxis=(dict(showgrid=False))
+)
+
+# Insert to columms for figs:
+left_column, right_column = st.columns(2)
+left_column.plotly_chart(fig_tool_broken, use_container_width=True)
+right_column.plotly_chart(fig_OBrud_Checked, use_container_width=True)
+
 
 # Show data
-# st.text("Raw Data Table, from MSSQL Database:")
-# st.dataframe(dfs)
+st.text("Raw Data Table, from MSSQL Database:")
+st.dataframe(dfs)
 
+st.text("NUmber of OBrud checked")
+st.dataframe(number_of_OBrud_checked)
+print(number_of_OBrud_checked)
 
 # ---- HIDE STREAMLIT STYLE ----
 hide_st_style = """
