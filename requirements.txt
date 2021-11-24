@@ -10,7 +10,7 @@
 
 #
 
--lotly==5.4.0
+lotly==5.4.0
 jupyter-dash==0.4.0
 mathplot==0.1
 mypy-extensions==0.4.3
