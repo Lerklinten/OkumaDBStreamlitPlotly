@@ -1,12 +1,6 @@
 import requests
 import json
-from datetime import datetime
-
-# import matplotlib.pyplot as plt
-import time
 import pandas as pd
-import numpy as np
-from pandas import Series, DataFrame
 import plotly.express as px
 import streamlit as st
 from streamlit_lottie import st_lottie
@@ -21,26 +15,31 @@ st.set_page_config(page_title="OkumaDB Dashboard",
 
 
 @st.cache
-def get_data_from_api():
-    url = f"http://127.0.0.1:8000/okumaDb/cCurrentAlarm/toolBreakage"
+def get_data_from_api(url: str, *tool: str):
     data = requests.get(url)
-
     dfs = pd.DataFrame(data.json())
+    if tool:
+        dfs["TimeLostToolBreakage"] = pd.to_datetime(
+            dfs["OBrudConfirmedTimestamp"]
+        ) - pd.to_datetime(dfs["TimeStamp"])
 
-    dfs["TimeLostToolBreakage"] = pd.to_datetime(
-        dfs["OBrudConfirmedTimestamp"]
-    ) - pd.to_datetime(dfs["TimeStamp"])
-
-    dfs["TimeLostToolBreakage"] = (pd.to_numeric(
-        dfs["TimeLostToolBreakage"].dt.total_seconds())/60).round(1)
+        dfs["TimeLostToolBreakage"] = (pd.to_numeric(
+            dfs["TimeLostToolBreakage"].dt.total_seconds())/60).round(1)
 
     return dfs
 
     # ------------------------------------------------------------------------------
 
 
-dfs = get_data_from_api()
+# Get data from API
+dfs = get_data_from_api(
+    "https://fastapi-okumadb.azurewebsites.net/okumaDb/cCurrentAlarm/toolBreakage/", "tool")
 print(dfs[:5])
+
+df = get_data_from_api(
+    "https://fastapi-okumadb.azurewebsites.net/okumaDb/cCurrentAlarm/")
+print(df[:5])
+
 
 # ---- SIDEBAR ----
 st.sidebar.image("./static/okuma.png", use_column_width=False, width=275)
@@ -160,9 +159,14 @@ right_column.plotly_chart(fig_OBrud_Checked, use_container_width=True)
 st.text("Raw Data Table, from MSSQL Database:")
 st.dataframe(dfs)
 
-st.text("NUmber of OBrud checked")
+st.text("Number of OBrud checked")
 st.dataframe(number_of_OBrud_checked)
-print(number_of_OBrud_checked)
+# print(number_of_OBrud_checked)
+
+# Print all alarms
+st.text("All alarm sorted by datetime")
+st.dataframe(df)
+
 
 # ---- HIDE STREAMLIT STYLE ----
 hide_st_style = """
