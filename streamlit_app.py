@@ -40,9 +40,6 @@ df = get_data_from_api(
     "https://fastapi-okumadb.azurewebsites.net/okumaDb/cCurrentAlarm/")
 print(df[:5])
 
-# Hyperlink tilbage til "/redoc"
-st.markdown( "Okuma [API](https://fastapi-okumadb.azurewebsites.net/docs "Comment after hyperlink")", unsafe_allow_html=False)
-
 
 # ---- SIDEBAR ----
 st.sidebar.image("./static/okuma.png", use_column_width=False, width=275)
