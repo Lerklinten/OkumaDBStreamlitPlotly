@@ -41,7 +41,7 @@ df = get_data_from_api(
 print(df[:5])
 
 # Hyperlink tilbage til "/redoc"
-st.markdown( OkumaDB API - docs [API](https://fastapi-okumadb.azurewebsites.net/docs "Comment after hyperlink"))
+st.markdown( "Okuma [API](https://fastapi-okumadb.azurewebsites.net/docs "Comment after hyperlink")", unsafe_allow_html=False)
 
 
 # ---- SIDEBAR ----
